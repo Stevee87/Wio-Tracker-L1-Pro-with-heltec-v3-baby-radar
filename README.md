@@ -2,6 +2,10 @@
 
 A wireless radar display using an **RD-03D sensor connected to a Heltec WiFi LoRa 32 V3/V3.2** and a **Wio Tracker L1 Pro with OLED** as the handheld controller. Both devices must be the EU868 versions. This firmware replaces Meshtastic.
 
+
+<img width="1512" height="2016" alt="image1" src="https://github.com/user-attachments/assets/3e08aa0d-fdf5-4512-8303-4cf25f3221a0" />
+
+
 **[Go to the flashing instructions](#flashing-instructions).**
 
 This repository contains the ready-to-flash firmware, this guide, and the [MIT License](LICENSE).
