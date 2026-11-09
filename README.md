@@ -6,7 +6,7 @@ A wireless radar display using an **RD-03D sensor connected to a Heltec WiFi LoR
 <img width="1512" height="2016" alt="image1" src="https://github.com/user-attachments/assets/3e08aa0d-fdf5-4512-8303-4cf25f3221a0" />
 
 
-**[Go to the flashing instructions](#flashing-instructions).**
+**[Go to the flashing instructions](#flashing-instructions).** For the US 915 MHz band with English display text, see the [US 915 MHz / English variant](#us915-english).
 
 This repository contains the ready-to-flash firmware, this guide, and the [MIT License](LICENSE).
 
@@ -18,6 +18,42 @@ This repository contains the ready-to-flash firmware, this guide, and the [MIT L
 | `LICENSE` | MIT license for Baby Radar's original project content |
 
 The supplied Heltec and Wio versions work together. Startup messages still use the original **RadarRemote** name. Working displays, radio communication, and target detection were confirmed on the physical setup. The target update rate is up to 20 Hz; actual rate, latency, and range have not been measured.
+
+<a id="us915-english"></a>
+
+## US 915 MHz / English variant
+
+The upstream firmware targets the EU868 band and shows German status text. The `firmware/us915_english/` folder contains the same two firmware versions patched for the **US 902–928 MHz band (915.0 MHz carrier)** with **English display text**. The EU868 and US915 editions of both boards use the same SX1262 radio, which covers both bands, so these files run on either hardware edition. Both devices must use files from the same folder: a 915 MHz station will not talk to an 869 MHz remote.
+
+| File | Purpose |
+|---|---|
+| `firmware/us915_english/Heltec_Radarstation_EN_915.bin` | Heltec station, English, 915 MHz, sensor TX → GPIO 4, RX → GPIO 5 (standard wiring) |
+| `firmware/us915_english/Heltec_Radarstation_EN_915_RX5TX4.bin` | Same, but for sensor TX → GPIO 5, RX → GPIO 4 (if you wired the UART the other way round) |
+| `firmware/us915_english/Wio_RadarRemote_EN_915.uf2` | Wio remote, English, 915 MHz |
+
+Flash them exactly as described in the [flashing instructions](#flashing-instructions) below, using these files in place of the originals. The Heltec image is still flashed at `0x0`.
+
+No source code is published for this project, so the variants are produced by `tools/patch_us915_english.py`, which patches the upstream binaries in place: strings are replaced with equal-or-shorter English text, the RadioLib carrier constant 869.525 is replaced by 915.0, and the ESP32 image checksum and SHA-256 are recomputed. Run `python3 tools/patch_us915_english.py` from the repository root to rebuild them, or edit the tables in the script to change the wording or pick a different channel.
+
+Display text in this variant:
+
+| Original (German) | US/English variant |
+|---|---|
+| SUCHE STATION | SEARCHING... |
+| VERBINDUNG WEG | LINK LOST |
+| RADAR OHNE DATEN | RADAR: NO DATA |
+| Funk: … Pak/s / Radar: … Mess/s | RF: … pkt/s / Radar: … meas/s |
+| Messalter | Data age |
+| Zielslot / Distanz / Tempo / Winkel / Grad | Slot / Dist / Speed / Angle / deg |
+| Keine aktuellen Ziele | No current targets |
+| frei | none |
+| Klick: Start / Klick: Pause | Click: Start / Click: Pause |
+| FUNKFEHLER | RADIO FAIL |
+| Funk bereit / Warte auf Wio / Wio: verbunden | Radio ready / Wait for Wio / Wio: connected |
+| RD03D: Daten OK / RD03D: KEINE DATEN | RD03D: Data OK / RD03D: NO DATA |
+| Ziele: | Tgts: |
+
+Everything else in this document applies unchanged.
 
 ## 1. Wiring
 
